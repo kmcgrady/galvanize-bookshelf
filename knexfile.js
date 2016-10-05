@@ -11,5 +11,8 @@ module.exports = {
     connection: 'postgres://localhost/bookshelf_test'
   },
 
-  production: {}
+  production: {
+    client: 'pg',
+    connection: process.env.https://rrathbone-galvanize-bookshelf.herokuapp.com
+  }
 };
