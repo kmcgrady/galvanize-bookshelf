@@ -1,17 +1,23 @@
 'use strict';
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
 const express = require('express');
 const app = express();
 
-app.disable('x-powered-by');
-
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const path = require('path');
+
+const port = process.env.PORT || 8000;
+
+const books = require('./routes/books');
+const favorites = require('./routes/favorites');
+const token = require('./routes/token');
+const users = require('./routes/users');
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 switch (app.get('env')) {
   case 'development':
@@ -25,10 +31,10 @@ switch (app.get('env')) {
   default:
 }
 
+app.disable('x-powered-by');
+
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-const path = require('path');
 
 app.use(express.static(path.join('public')));
 
@@ -40,11 +46,6 @@ app.use((req, res, next) => {
 
   res.sendStatus(406);
 });
-
-const books = require('./routes/books');
-const favorites = require('./routes/favorites');
-const token = require('./routes/token');
-const users = require('./routes/users');
 
 app.use(books);
 app.use(favorites);
@@ -68,8 +69,6 @@ app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.sendStatus(500);
 });
-
-const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
   if (app.get('env') !== 'test') {
