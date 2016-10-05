@@ -23,11 +23,14 @@ router.get('/books', (_req, res, next) => {
 });
 
 router.get('/books/:id', (req, res, next) => {
-  if (isNaN(req.params.id)) {
-    return next(boom.create(404, 'Not Found'));
+  const id = Number.parseInt(req.params.id);
+
+  if (Number.isNaN(id)) {
+    return next();
   }
+
   knex('books')
-    .where('id', req.params.id)
+    .where('id', id)
     .first()
     .then((row) => {
       if (!row) {
@@ -81,22 +84,21 @@ router.post('/books', (req, res, next) => {
 });
 
 router.patch('/books/:id', (req, res, next) => {
-  if (isNaN(req.params.id)) {
-    return next(boom.create(404, 'Not Found'));
+  const id = Number.parseInt(req.params.id);
+
+  if (Number.isNaN(id)) {
+    return next();
   }
+
   knex('books')
-    .where('id', req.params.id)
+    .where('id', id)
     .first()
     .then((book) => {
       if (!book) {
         throw boom.create(404, 'Not Found');
       }
 
-      const { title } = req.body;
-      const { author } = req.body;
-      const { genre } = req.body;
-      const { description } = req.body;
-      const { coverUrl } = req.body;
+      const { title, author, genre, description, coverUrl } = req.body;
       const updateBook = {};
 
       if (title) {
