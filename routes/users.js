@@ -28,13 +28,15 @@ router.post('/users', (req, res, next) => {
   }
 
   knex('users')
+    .select(knex.raw('1=1'))
     .where('email', email)
+    .first()
     .then((result) => {
-      if (result.length > 0) {
+      if (result) {
         return next(boom.create(400, 'Email already exists'));
       }
-      
-      bcrypt.hash(password, 12)
+
+      return bcrypt.hash(password, 12)
       .then((hashedPassword) => {
         const insertUser = { firstName, lastName, email, hashedPassword };
 
