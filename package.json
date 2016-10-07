@@ -10,7 +10,6 @@
     "nf": "nf start",
     "start": "nodemon server.js",
     "test": "mocha",
-    "nf": "nf start",
     "nodemon": "nodemon server.js"
   },
   "repository": {

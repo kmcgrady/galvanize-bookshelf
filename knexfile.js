@@ -13,6 +13,6 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.https://rrathbone-galvanize-bookshelf.herokuapp.com
+    connection: process.env.DATABASE_URL
   }
 };
