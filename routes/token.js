@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+
 'use strict';
 
 const boom = require('boom');
@@ -5,20 +7,21 @@ const bcrypt = require('bcrypt-as-promised');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const knex = require('../knex');
-const { camelizeKeys, decamelizeKeys } = require('humps');
+const { camelizeKeys } = require('humps');
 
 const router = express.Router();
 
-router.get('/token', (req, res, next) => {
-  jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
+router.get('/token', (req, res) => {
+  jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err) => {
     if (err) {
       res.send(false);
+
       return;
     }
 
     res.send(true);
   });
-})
+});
 
 router.post('/token', (req, res, next) => {
   const { email, password } = req.body;
@@ -69,7 +72,7 @@ router.post('/token', (req, res, next) => {
     });
 });
 
-router.delete('/token', (req, res, next) => {
+router.delete('/token', (req, res) => {
   res.clearCookie('token');
   res.send(true);
 });

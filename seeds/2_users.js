@@ -1,3 +1,6 @@
+/* eslint-disable max-len */
+/* eslint-disable camelcase */
+
 'use strict';
 
 exports.seed = function(knex) {

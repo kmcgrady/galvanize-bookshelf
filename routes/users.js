@@ -1,3 +1,6 @@
+/* eslint-disable max-len */
+/* eslint-disable new-cap */
+
 'use strict';
 
 const bcrypt = require('bcrypt-as-promised');
@@ -6,7 +9,7 @@ const express = require('express');
 const knex = require('../knex');
 const { camelizeKeys, decamelizeKeys } = require('humps');
 
-const router = express.Router(); // eslint-disable new-cap
+const router = express.Router();
 
 router.post('/users', (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
@@ -24,7 +27,7 @@ router.post('/users', (req, res, next) => {
   }
 
   if (!password || password.length < 8) {
-    return next(boom.create(400, 'Password must be at least 8 characters long')); // eslint-disable max-len
+    return next(boom.create(400, 'Password must be at least 8 characters long'));
   }
 
   knex('users')

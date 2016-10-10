@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 'use strict';
 
 const boom = require('boom');
@@ -46,21 +48,22 @@ router.get('/favorites', authorize, (req, res, next) => {
 });
 
 router.post('/favorites', authorize, (req, res, next) => {
-    const { bookId } = req.body;
-    const favorite = { bookId, userId: req.token.userId };
+  const { bookId } = req.body;
+  const favorite = { bookId, userId: req.token.userId };
 
-    if (!bookId)
-      return next(boom.create(400, 'Book id must not be blank'));
+  if (!bookId) {
+    return next(boom.create(400, 'Book id must not be blank'));
+  }
 
-    knex('favorites')
-      .insert(decamelizeKeys(favorite), '*')
-      .then((rows) => {
-        favorite.id = rows[0].id;
-        res.send(favorite);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  knex('favorites')
+    .insert(decamelizeKeys(favorite), '*')
+    .then((rows) => {
+      favorite.id = rows[0].id;
+      res.send(favorite);
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 router.delete('/favorites', authorize, (req, res, next) => {
@@ -82,9 +85,10 @@ router.delete('/favorites', authorize, (req, res, next) => {
       }
 
       favorite = camelizeKeys(row);
+
       return knex('favorites')
         .where({ book_id: bookId, user_id: userId })
-        .del()
+        .del();
     })
     .then(() => {
       delete favorite.id;
