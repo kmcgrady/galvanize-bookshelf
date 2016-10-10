@@ -48,32 +48,39 @@ router.get('/favorites', authorize, (req, res, next) => {
 });
 
 router.post('/favorites', authorize, (req, res, next) => {
-  const { bookId } = req.body;
-  const favorite = { bookId, userId: req.token.userId };
-
-  if (!bookId) {
-    return next(boom.create(400, 'Book id must not be blank'));
-  }
-
-  knex('favorites')
-    .insert(decamelizeKeys(favorite), '*')
-    .then((rows) => {
-      favorite.id = rows[0].id;
-      res.send(favorite);
-    })
-    .catch((err) => {
-      next(err);
-    });
-});
-
-router.delete('/favorites', authorize, (req, res, next) => {
-  let favorite;
-
   const { userId } = req.token;
   const { bookId } = req.body;
 
-  if (typeof bookId !== 'number') {
-    return next(boom.create(400, 'Id must be an integer'));
+  if (!userId) {
+    return next(boom.create(400, ''));
+  }
+
+  if (!bookId) {
+    return next(boom.create(400, ''));
+  }
+
+  const insertFavorite = { userId, bookId };
+
+  knex('favorites')
+    .insert(decamelizeKeys(insertFavorite), '*')
+    .then((rows) => {
+      const favorite = camelizeKeys(rows[0]);
+
+      res.send(favorite);
+    })
+  .catch((err) => {
+    next(err);
+  });
+});
+
+router.delete('/favorites', authorize, (req, res, next) => {
+  const { userId } = req.token;
+  const { bookId } = req.body;
+
+  let favorite;
+
+  if (isNaN(bookId)) {
+    return next(boom.create(400, 'Book ID must be an Integer'));
   }
 
   knex('favorites')
@@ -87,8 +94,8 @@ router.delete('/favorites', authorize, (req, res, next) => {
       favorite = camelizeKeys(row);
 
       return knex('favorites')
-        .where({ book_id: bookId, user_id: userId })
-        .del();
+        .del()
+        .where({ book_id: bookId, user_id: userId });
     })
     .then(() => {
       delete favorite.id;
