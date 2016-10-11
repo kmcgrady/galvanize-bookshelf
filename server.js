@@ -1,3 +1,5 @@
+/* eslint-disable no-console*/
+
 'use strict';
 
 const express = require('express');
@@ -67,11 +69,11 @@ app.use((err, _req, res, _next) => {
 
   console.error(JSON.stringify(err, null, 2));
 
-  if(err.status) {
+  if (err.status) {
     return res
       .status(err.status)
       .set('Content-Type', 'text/plain')
-      .send(err.statusText)
+      .send(err.statusText);
   }
   console.error(err.stack);
   res.sendStatus(500);

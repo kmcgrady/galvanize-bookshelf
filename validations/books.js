@@ -24,9 +24,9 @@ module.exports.post = {
       .required()
       .trim(),
 
-    cover_url: Joi.string()
+    coverUrl: Joi.string()
       .label('Url')
       .required()
-      .trim(),
+      .trim()
   }
 };
