@@ -9,6 +9,9 @@ const jwt = require('jsonwebtoken');
 const knex = require('../knex');
 const { camelizeKeys } = require('humps');
 
+const ev = require('express-validation');
+const validations = require('../validations/users');
+
 const router = express.Router();
 
 router.get('/token', (req, res) => {
@@ -23,16 +26,16 @@ router.get('/token', (req, res) => {
   });
 });
 
-router.post('/token', (req, res, next) => {
+router.post('/token', ev(validations.post), (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !email.trim()) {
-    return next(boom.create(400, 'Email must not be blank'));
-  }
-
-  if (!password || password.length < 8) {
-    return next(boom.create(400, 'Password must not be blank'));
-  }
+  // if (!email || !email.trim()) {
+  //   return next(boom.create(400, 'Email must not be blank'));
+  // }
+  //
+  // if (!password || password.length < 8) {
+  //   return next(boom.create(400, 'Password must not be blank'));
+  // }
 
   let user;
 

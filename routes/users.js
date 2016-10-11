@@ -9,26 +9,29 @@ const express = require('express');
 const knex = require('../knex');
 const { camelizeKeys, decamelizeKeys } = require('humps');
 
+const ev = require('express-validation');
+const validations = require('../validations/users');
+
 const router = express.Router();
 
-router.post('/users', (req, res, next) => {
+router.post('/users', ev(validations.post), (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
-  if (!firstName || !firstName.trim()) {
-    return next(boom.create(400, 'First name must not be blank'));
-  }
-
-  if (!lastName || !lastName.trim()) {
-    return next(boom.create(400, 'Last name must not be blank'));
-  }
-
-  if (!email || !email.trim()) {
-    return next(boom.create(400, 'Email must not be blank'));
-  }
-
-  if (!password || password.length < 8) {
-    return next(boom.create(400, 'Password must be at least 8 characters long'));
-  }
+  // if (!firstName || !firstName.trim()) {
+  //   return next(boom.create(400, 'First name must not be blank'));
+  // }
+  //
+  // if (!lastName || !lastName.trim()) {
+  //   return next(boom.create(400, 'Last name must not be blank'));
+  // }
+  //
+  // if (!email || !email.trim()) {
+  //   return next(boom.create(400, 'Email must not be blank'));
+  // }
+  //
+  // if (!password || password.length < 8) {
+  //   return next(boom.create(400, 'Password must be at least 8 characters long'));
+  // }
 
   knex('users')
     .select(knex.raw('1=1'))

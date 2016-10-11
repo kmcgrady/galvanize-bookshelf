@@ -8,6 +8,9 @@ const jwt = require('jsonwebtoken');
 const knex = require('../knex');
 const { camelizeKeys, decamelizeKeys } = require('humps');
 
+const ev = require('express-validation');
+const validations = require('../validations/users');
+
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
@@ -47,17 +50,17 @@ router.get('/favorites', authorize, (req, res, next) => {
     });
 });
 
-router.post('/favorites', authorize, (req, res, next) => {
+router.post('/favorites', ev(validations.post), authorize, (req, res, next) => {
   const { userId } = req.token;
   const { bookId } = req.body;
 
-  if (!userId) {
-    return next(boom.create(400, ''));
-  }
-
-  if (!bookId) {
-    return next(boom.create(400, ''));
-  }
+  // if (!userId) {
+  //   return next(boom.create(400, ''));
+  // }
+  //
+  // if (!bookId) {
+  //   return next(boom.create(400, ''));
+  // }
 
   const insertFavorite = { userId, bookId };
 
