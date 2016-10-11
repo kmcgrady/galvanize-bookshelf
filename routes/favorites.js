@@ -9,7 +9,7 @@ const knex = require('../knex');
 const { camelizeKeys, decamelizeKeys } = require('humps');
 
 const ev = require('express-validation');
-const validations = require('../validations/users');
+const validations = require('../validations/favorites');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -26,7 +26,7 @@ const authorize = function(req, res, next) {
   });
 };
 
-router.get('/favorites/:id', authorize, (req, res, next) => {
+router.get('/favorites/check', authorize, (req, res, next) => {
   knex('favorites')
     .where('book_id', req.query.bookId)
     .then((favorites) => res.send(favorites.length > 0))
@@ -50,7 +50,7 @@ router.get('/favorites', authorize, (req, res, next) => {
     });
 });
 
-router.post('/favorites', ev(validations.post), authorize, (req, res, next) => {
+router.post('/favorites', authorize, ev(validations.post), (req, res, next) => {
   const { userId } = req.token;
   const { bookId } = req.body;
 
@@ -91,7 +91,7 @@ router.delete('/favorites', authorize, (req, res, next) => {
     .first()
     .then((row) => {
       if (!row) {
-        throw boom.create(404, 'Not Found');
+        throw boom.create(404, 'Favorite not found');
       }
 
       favorite = camelizeKeys(row);

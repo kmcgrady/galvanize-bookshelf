@@ -8,12 +8,6 @@ module.exports.post = {
       .integer()
       .min(0)
       .label('Book Id')
-      .required(),
-
-    userId: Joi.number()
-      .integer()
-      .min(0)
-      .label('User Id')
       .required()
   }
 };

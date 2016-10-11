@@ -10,7 +10,7 @@ const knex = require('../knex');
 const { camelizeKeys } = require('humps');
 
 const ev = require('express-validation');
-const validations = require('../validations/users');
+const validations = require('../validations/token');
 
 const router = express.Router();
 

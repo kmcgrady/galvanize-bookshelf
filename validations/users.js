@@ -7,13 +7,11 @@ module.exports.post = {
     firstName: Joi.string()
       .label('First Name')
       .required()
-      .email()
       .trim(),
 
     lastName: Joi.string()
       .label('Last Name')
       .required()
-      .email()
       .trim(),
 
     email: Joi.string()
